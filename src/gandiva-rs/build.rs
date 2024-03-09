@@ -20,12 +20,8 @@ use std::{env, fs};
 
 use once_cell::sync::Lazy;
 
-static RUST_PROJ_DIR: Lazy<String> = Lazy::new(|| {
-    std::env::current_dir()
-        .expect("Current dir")
-        .display()
-        .to_string()
-});
+static RUST_PROJ_DIR: Lazy<String> =
+    Lazy::new(|| std::env::var("CARGO_MANIFEST_DIR").expect("Manifest dir is always set by cargo"));
 
 static PROTO_SOURCE_DIR: Lazy<String> =
     Lazy::new(|| format!("{}/../proto", RUST_PROJ_DIR.as_str()));
