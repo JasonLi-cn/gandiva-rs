@@ -18,6 +18,7 @@ Cargo.lock
 build/
 arrow-cpp-build/
 arrow-cpp-install/
+cpp-build/
 
 # Dev
 .idea/

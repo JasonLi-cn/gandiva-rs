@@ -1,0 +1,38 @@
+[package]
+name = "gandiva-datafusion-plugin"
+authors = { workspace = true }
+edition = { workspace = true }
+description = "Gandiva Datafusion Plugin."
+homepage = { workspace = true }
+license = { workspace = true }
+readme = "README.md"
+repository = { workspace = true }
+version = { workspace = true }
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+include = [
+    "benches/*.rs",
+    "src/**/*.rs",
+    "Cargo.toml",
+]
+
+[dependencies]
+arrow = { version = "50.0.0", features = ["test_utils"] }
+datafusion = { version = "36.0.0" }
+futures = { version = "0.3" }
+gandiva-rs-bindings = { workspace = true }
+log = { version = "0.4.21" }
+tokio = { version = "1.36" }
+
+[dev-dependencies]
+criterion = { version = "0.5" }
+tokio = { version = "1.36", features = ["rt-multi-thread"] }
+
+[[bench]]
+harness = false
+name = "gandiva_filter_exec"
+
+[[bench]]
+harness = false
+name = "gandiva_projection_exec"
