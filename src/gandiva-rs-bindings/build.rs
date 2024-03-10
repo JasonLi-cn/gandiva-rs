@@ -23,16 +23,14 @@ use once_cell::sync::Lazy;
 static RUST_PROJ_DIR: Lazy<String> =
     Lazy::new(|| std::env::var("CARGO_MANIFEST_DIR").expect("Manifest dir is always set by cargo"));
 
-static PROTO_SOURCE_DIR: Lazy<String> =
-    Lazy::new(|| format!("{}/../proto", RUST_PROJ_DIR.as_str()));
+static PROTO_SOURCE_DIR: Lazy<String> = Lazy::new(|| format!("{}/proto", RUST_PROJ_DIR.as_str()));
 
-static CPP_SOURCE_DIR: Lazy<String> = Lazy::new(|| format!("{}/../cpp", RUST_PROJ_DIR.as_str()));
+static CPP_SOURCE_DIR: Lazy<String> = Lazy::new(|| format!("{}/cpp", RUST_PROJ_DIR.as_str()));
 
 static OUT_DIR: Lazy<String> =
     Lazy::new(|| std::env::var("OUT_DIR").expect("Cannot find OUT_DIR environment variable"));
 
-static ARROW_PROJ_DIR: Lazy<String> =
-    Lazy::new(|| format!("{}/../../arrow", RUST_PROJ_DIR.as_str()));
+static ARROW_PROJ_DIR: Lazy<String> = Lazy::new(|| format!("{}/arrow", RUST_PROJ_DIR.as_str()));
 
 static ARROW_CPP_BUILD_DIR: Lazy<String> = Lazy::new(|| match env::var("ARROW_CPP_BUILD_DIR") {
     Ok(s) => s,

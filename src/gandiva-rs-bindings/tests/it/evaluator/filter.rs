@@ -18,9 +18,9 @@ use std::sync::Arc;
 
 use arrow::array::Int32Array;
 use arrow::datatypes::{DataType, Field, Schema};
-use gandiva_rs::evaluator::filter::Filter;
-use gandiva_rs::expression::condition::Condition;
-use gandiva_rs::expression::tree_builder::TreeBuilder;
+use gandiva_rs_bindings::evaluator::filter::Filter;
+use gandiva_rs_bindings::expression::condition::Condition;
+use gandiva_rs_bindings::expression::tree_builder::TreeBuilder;
 
 #[test]
 fn test_filter() {

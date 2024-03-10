@@ -1,3 +1,6 @@
 [submodule "arrow"]
 	path = arrow
 	url = https://github.com/apache/arrow.git
+[submodule "src/gandiva-rs-bindings/arrow"]
+	path = src/gandiva-rs-bindings/arrow
+	url = https://github.com/apache/arrow.git

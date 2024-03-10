@@ -19,17 +19,17 @@ use std::sync::Arc;
 use arrow::array::{Array, Int32Array};
 use arrow::datatypes::{DataType, Field, Schema};
 use arrow::record_batch::RecordBatch;
-use gandiva_rs::bindings::{gandiva_ProtoMessage, gandiva_RustMutableBuffers};
-use gandiva_rs::evaluator::buffer::{
+use gandiva_rs_bindings::bindings::{gandiva_ProtoMessage, gandiva_RustMutableBuffers};
+use gandiva_rs_bindings::evaluator::buffer::{
     rust_reserve, to_g_buffers, to_g_mutable_buffer, to_g_mutable_buffers,
 };
-use gandiva_rs::evaluator::selection_vector::SelectionVector;
-use gandiva_rs::evaluator::utils::{new_buffers, to_arrays};
-use gandiva_rs::expression::arrow_type_helper::ArrowTypeHelper;
-use gandiva_rs::expression::expression_tree::ExpressionTree;
-use gandiva_rs::expression::field_node::FieldNode;
-use gandiva_rs::expression::function_node::FunctionNode;
-use gandiva_rs::expression::int_node::IntNode;
+use gandiva_rs_bindings::evaluator::selection_vector::SelectionVector;
+use gandiva_rs_bindings::evaluator::utils::{new_buffers, to_arrays};
+use gandiva_rs_bindings::expression::arrow_type_helper::ArrowTypeHelper;
+use gandiva_rs_bindings::expression::expression_tree::ExpressionTree;
+use gandiva_rs_bindings::expression::field_node::FieldNode;
+use gandiva_rs_bindings::expression::function_node::FunctionNode;
+use gandiva_rs_bindings::expression::int_node::IntNode;
 use prost::Message;
 
 fn main() {
@@ -49,7 +49,7 @@ fn main() {
     };
 
     let module_id = unsafe {
-        gandiva_rs::bindings::gandiva_BuildProjector(
+        gandiva_rs_bindings::bindings::gandiva_BuildProjector(
             pb_schema,
             pb_exprs,
             selection_vector_type,
@@ -78,7 +78,7 @@ fn main() {
     let mut out_bufs = to_g_mutable_buffer(&buffers);
 
     unsafe {
-        gandiva_rs::bindings::gandiva_EvaluateProjector(
+        gandiva_rs_bindings::bindings::gandiva_EvaluateProjector(
             module_id,
             num_rows as _,
             in_bufs.as_mut_ptr(),
@@ -124,7 +124,7 @@ fn build_exprs() -> Vec<u8> {
     let result_field = Field::new("result", DataType::Int32, true);
     let expression = ExpressionTree::create(Box::new(func_node), result_field);
 
-    let expressions = gandiva_rs::proto::ExpressionList {
+    let expressions = gandiva_rs_bindings::proto::ExpressionList {
         exprs: vec![expression.to_protobuf().unwrap()],
     };
 

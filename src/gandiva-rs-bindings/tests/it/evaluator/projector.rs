@@ -18,9 +18,9 @@ use std::sync::Arc;
 
 use arrow::array::{Int32Array, StringBuilder};
 use arrow::datatypes::{DataType, Field, Schema};
-use gandiva_rs::evaluator::projector::Projector;
-use gandiva_rs::expression::expression_tree::ExpressionTree;
-use gandiva_rs::expression::tree_builder::TreeBuilder;
+use gandiva_rs_bindings::evaluator::projector::Projector;
+use gandiva_rs_bindings::expression::expression_tree::ExpressionTree;
+use gandiva_rs_bindings::expression::tree_builder::TreeBuilder;
 
 pub fn build_schema() -> Schema {
     let int32 = Field::new("int32", DataType::Int32, true);
