@@ -45,7 +45,11 @@ pub struct GandivaFilterExec {
 
 impl DisplayAs for GandivaFilterExec {
     fn fmt_as(&self, t: DisplayFormatType, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        self.inner.fmt_as(t, f)
+        match t {
+            DisplayFormatType::Default | DisplayFormatType::Verbose => {
+                write!(f, "GandivaFilterExec: {}", self.inner.predicate())
+            }
+        }
     }
 }
 

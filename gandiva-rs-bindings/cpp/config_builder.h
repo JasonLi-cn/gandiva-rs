@@ -17,7 +17,9 @@
 #include "base.h"
 
 namespace gandiva {
-    ConfigId BuildConfigInstance(bool optimize, bool target_host_cpu);
 
-    void ReleaseConfigInstance(ConfigId config_id);
-} // namespace gandiva
+ConfigId BuildConfigInstance(bool optimize, bool target_host_cpu);
+
+void ReleaseConfigInstance(ConfigId config_id);
+
+}  // namespace gandiva

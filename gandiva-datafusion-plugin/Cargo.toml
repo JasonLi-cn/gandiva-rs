@@ -18,7 +18,7 @@ include = [
 ]
 
 [dependencies]
-arrow = { version = "50.0.0", features = ["test_utils"] }
+arrow = { workspace = true, features = ["test_utils"] }
 datafusion = { version = "36.0.0" }
 futures = { version = "0.3" }
 gandiva-rs-bindings = { workspace = true }
@@ -28,6 +28,10 @@ tokio = { version = "1.36" }
 [dev-dependencies]
 criterion = { version = "0.5" }
 tokio = { version = "1.36", features = ["rt-multi-thread"] }
+
+[[bench]]
+harness = false
+name = "gandiva_expr"
 
 [[bench]]
 harness = false

@@ -35,7 +35,7 @@ fn build_schema() -> Schema {
 
 fn build_condition() -> Condition {
     let field = TreeBuilder::make_field(Field::new("int32", DataType::Int32, false));
-    let literal = TreeBuilder::make_int(5846);
+    let literal = TreeBuilder::make_int32(5846);
     let root = TreeBuilder::make_function(
         "less_than".to_string(),
         vec![field, literal],
@@ -46,14 +46,14 @@ fn build_condition() -> Condition {
 
 fn build_condition2() -> Condition {
     let field = TreeBuilder::make_field(Field::new("int32", DataType::Int32, false));
-    let literal = TreeBuilder::make_int(5846);
+    let literal = TreeBuilder::make_int32(5846);
     let less_than = TreeBuilder::make_function(
         "less_than".to_string(),
         vec![field.clone(), literal],
         DataType::Boolean,
     );
 
-    let literal = TreeBuilder::make_int(891);
+    let literal = TreeBuilder::make_int32(891);
     let greater_than = TreeBuilder::make_function(
         "greater_than".to_string(),
         vec![field, literal],

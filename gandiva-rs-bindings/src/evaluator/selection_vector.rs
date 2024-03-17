@@ -50,7 +50,7 @@ impl SelectionVector {
         } else if rows <= u32::MAX as usize {
             SelectionVectorType::SvInt32
         } else {
-            todo!()
+            SelectionVectorType::SvInt64
         };
         Self::create_with_type(ty, rows)
     }
@@ -64,6 +64,7 @@ impl SelectionVector {
             SelectionVectorType::SvNone => return Self::default(),
             SelectionVectorType::SvInt16 => DataType::UInt16,
             SelectionVectorType::SvInt32 => DataType::UInt32,
+            SelectionVectorType::SvInt64 => DataType::UInt64,
         };
 
         let len = data_type.primitive_width().unwrap() * rows;
@@ -111,7 +112,7 @@ impl SelectionVector {
     }
 
     pub fn to_boolean_array(self) -> BooleanArray {
-        use arrow::datatypes::{UInt16Type, UInt32Type};
+        use arrow::datatypes::{UInt16Type, UInt32Type, UInt64Type};
 
         macro_rules! build_boolean_array {
             ($ARROW_PRIMITIVE_TYPE:ty) => {{
@@ -132,6 +133,7 @@ impl SelectionVector {
             SelectionVectorType::SvNone => BooleanArray::new_null(0),
             SelectionVectorType::SvInt16 => build_boolean_array!(UInt16Type),
             SelectionVectorType::SvInt32 => build_boolean_array!(UInt32Type),
+            SelectionVectorType::SvInt64 => build_boolean_array!(UInt64Type),
         }
     }
 }

@@ -67,6 +67,7 @@ enum SelectionVectorType {
   SV_NONE = 0;
   SV_INT16 = 1;
   SV_INT32 = 2;
+  SV_INT64 = 3;
 }
 
 message ExtGandivaType {
@@ -89,107 +90,6 @@ message Field {
   repeated Field children = 4;
 }
 
-message FieldNode {
-  optional Field field = 1;
-}
-
-message FunctionNode {
-  optional string functionName = 1;
-  repeated TreeNode inArgs = 2;
-  optional ExtGandivaType returnType = 3;
-}
-
-message IfNode {
-  optional TreeNode cond = 1;
-  optional TreeNode thenNode = 2;
-  optional TreeNode elseNode = 3;
-  optional ExtGandivaType returnType = 4;
-}
-
-message AndNode {
-  repeated TreeNode args = 1;
-}
-
-message OrNode {
-  repeated TreeNode args = 1;
-}
-
-message NullNode {
-  optional ExtGandivaType type = 1;
-}
-
-message IntNode {
-  optional int32 value = 1;
-}
-
-message FloatNode {
-  optional float value = 1;
-}
-
-message DoubleNode {
-  optional double value = 1;
-}
-
-message BooleanNode {
-  optional bool value = 1;
-}
-
-message Int64Node {
-  optional int64 value = 1;
-}
-
-message StringNode {
-  optional bytes value = 1;
-}
-
-message BinaryNode {
-  optional bytes value = 1;
-}
-
-message DecimalNode {
-  optional string value = 1;
-  optional int32 precision = 2;
-  optional int32 scale = 3;
-}
-
-
-message TreeNode {
-  optional FieldNode fieldNode = 1;
-  optional FunctionNode fnNode = 2;
-
-  // control expressions
-  optional IfNode ifNode = 6;
-  optional AndNode andNode = 7;
-  optional OrNode orNode = 8;
-
-  // literals
-  optional NullNode nullNode = 11;
-  optional IntNode intNode = 12;
-  optional FloatNode floatNode = 13;
-  optional Int64Node int64Node = 14;
-  optional BooleanNode booleanNode = 15;
-  optional DoubleNode doubleNode = 16;
-  optional StringNode stringNode = 17;
-  optional BinaryNode binaryNode = 18;
-  optional DecimalNode decimalNode = 19;
-
-  // in expr
-  optional InNode inNode = 21;
-}
-
-message ExpressionRoot {
-  optional TreeNode root = 1;
-  optional Field resultType = 2;
-}
-
-message ExpressionList {
-  repeated ExpressionRoot exprs = 2;
-}
-
-message Condition {
-  optional TreeNode root = 1;
-}
-
 message Schema {
   repeated Field columns = 1;
 }
@@ -208,19 +108,115 @@ message FunctionSignature {
   repeated ExtGandivaType paramTypes = 3;
 }
 
-message InNode {
-  optional TreeNode node = 1;
-  optional IntConstants intValues = 2;
-  optional Int64Constants int64Values = 3;
-  optional StringConstants stringValues = 4;
-  optional BinaryConstants binaryValues = 5;
-  optional DecimalConstants decimalValues = 6;
-  optional FloatConstants floatValues = 7;
-  optional DoubleConstants doubleValues = 8;
+// Tree Expression Builder
+// code: arrow/cpp/src/gandiva/tree_expr_builder.h
+
+message FieldNode {
+  optional Field field = 1;
 }
 
-message IntConstants {
-  repeated IntNode intValues = 1;
+message FunctionNode {
+  optional string functionName = 1;
+  repeated TreeNode inArgs = 2;
+  optional ExtGandivaType returnType = 3;
+}
+
+// Control Nodes
+
+message IfNode {
+  optional TreeNode cond = 1;
+  optional TreeNode thenNode = 2;
+  optional TreeNode elseNode = 3;
+  optional ExtGandivaType returnType = 4;
+}
+
+message AndNode {
+  repeated TreeNode args = 1;
+}
+
+message OrNode {
+  repeated TreeNode args = 1;
+}
+
+// Literal Nodes
+
+message NullNode {
+  optional ExtGandivaType type = 1;
+}
+
+message BooleanNode {
+  optional bool value = 1;
+}
+
+message UInt8Node {
+  optional uint32 value = 1;
+}
+
+message UInt16Node {
+  optional uint32 value = 1;
+}
+
+message UInt32Node {
+  optional uint32 value = 1;
+}
+
+message UInt64Node {
+  optional uint64 value = 1;
+}
+
+message Int8Node {
+  optional int32 value = 1;
+}
+
+message Int16Node {
+  optional int32 value = 1;
+}
+
+message Int32Node {
+  optional int32 value = 1;
+}
+
+message Int64Node {
+  optional int64 value = 1;
+}
+
+message Float32Node {
+  optional float value = 1;
+}
+
+message Float64Node {
+  optional double value = 1;
+}
+
+message StringNode {
+  optional bytes value = 1;
+}
+
+message BinaryNode {
+  optional bytes value = 1;
+}
+
+message DecimalNode {
+  optional string value = 1;
+  optional int32 precision = 2;
+  optional int32 scale = 3;
+}
+
+// In Node
+
+message InNode {
+  optional TreeNode node = 1;
+  optional Int32Constants int32Values = 2;
+  optional Int64Constants int64Values = 3;
+  optional DecimalConstants decimalValues = 4;
+  optional StringConstants stringValues = 5;
+  optional BinaryConstants binaryValues = 6;
+  optional Float32Constants float32Values = 7;
+  optional Float64Constants float64Values = 8;
+}
+
+message Int32Constants {
+  repeated Int32Node int32Values = 1;
 }
 
 message Int64Constants {
@@ -231,18 +227,63 @@ message DecimalConstants {
   repeated DecimalNode decimalValues = 1;
 }
 
-message FloatConstants {
-  repeated FloatNode floatValues = 1;
-}
-
-message DoubleConstants {
-  repeated DoubleNode doubleValues = 1;
-}
-
 message StringConstants {
   repeated StringNode stringValues = 1;
 }
 
 message BinaryConstants {
   repeated BinaryNode binaryValues = 1;
+}
+
+message Float32Constants {
+  repeated Float32Node float32Values = 1;
+}
+
+message Float64Constants {
+  repeated Float64Node float64Values = 1;
+}
+
+// Tree Node
+
+message TreeNode {
+  optional FieldNode fieldNode = 1;
+  optional FunctionNode fnNode = 2;
+
+  // control expressions
+  optional IfNode ifNode = 6;
+  optional AndNode andNode = 7;
+  optional OrNode orNode = 8;
+
+  // literals
+  optional NullNode nullNode = 11;
+  optional BooleanNode booleanNode = 12;
+  optional UInt8Node uint8Node = 13;
+  optional UInt16Node uint16Node = 14;
+  optional UInt32Node uint32Node = 15;
+  optional UInt64Node uint64Node = 16;
+  optional Int8Node int8Node = 17;
+  optional Int16Node int16Node = 18;
+  optional Int32Node int32Node = 19;
+  optional Int64Node int64Node = 20;
+  optional Float32Node float32Node = 21;
+  optional Float64Node float64Node = 22;
+  optional StringNode stringNode = 23;
+  optional BinaryNode binaryNode = 24;
+  optional DecimalNode decimalNode = 25;
+
+  // in expr
+  optional InNode inNode = 26;
+}
+
+message ExpressionRoot {
+  optional TreeNode root = 1;
+  optional Field resultType = 2;
+}
+
+message ExpressionList {
+  repeated ExpressionRoot exprs = 2;
+}
+
+message Condition {
+  optional TreeNode root = 1;
 }

@@ -89,12 +89,19 @@ impl ArrowTypeHelper {
                 ext_type.scale = Some(scale as i32);
                 GandivaType::Decimal
             }
-            // DataType::List(_) => GandivaType::List,
-            // DataType::Struct(_) => GandivaType::Struct,
-            // DataType::Union(_, _) => GandivaType::Union,
-            // DataType::Dictionary(_, _) => GandivaType::Dictionary,
-            // DataType::Map(_, _) => GandivaType::Map,
-            other => unimplemented!("{}", other),
+            DataType::Dictionary(_, _)
+            | DataType::Duration(_)
+            | DataType::FixedSizeList(_, _)
+            | DataType::LargeBinary
+            | DataType::LargeUtf8
+            | DataType::LargeList(_)
+            | DataType::List(_)
+            | DataType::Map(_, _)
+            | DataType::RunEndEncoded(_, _)
+            | DataType::Struct(_)
+            | DataType::Union(_, _) => {
+                unimplemented!("{}", arrow_type)
+            }
         } as i32;
 
         ext_type.r#type = Some(ty);

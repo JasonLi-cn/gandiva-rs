@@ -19,64 +19,56 @@
 #include "base.h"
 
 namespace gandiva {
-    struct RustMutableBuffers {
-        void *addr;
-        int32_t len;
-    };
 
-    struct RustBuffer {
-        uintptr_t addr;
-        int64_t size;
-    };
+struct RustMutableBuffers {
+  void* addr;
+  int32_t len;
+};
 
-    struct RustMutableBuffer {
-        uintptr_t addr;
-        int64_t size;
-        int64_t capacity;
-    };
+struct RustBuffer {
+  uintptr_t addr;
+  int64_t size;
+};
 
-    struct ProtoMessage {
-        uint8_t *addr;
-        int32_t len;
-    };
+struct RustMutableBuffer {
+  uintptr_t addr;
+  int64_t size;
+  int64_t capacity;
+};
 
-    struct SelectionVectorInfo {
-        SelectionVectorType type;
-        int32_t rows;
-        uintptr_t addr;
-        int64_t size;
-    };
+struct ProtoMessage {
+  uint8_t* addr;
+  int32_t len;
+};
 
-    using rust_mutable_buffer_reserve_fn = void (*)(RustMutableBuffers *, uintptr_t, RustMutableBuffer *, int64_t);
+struct SelectionVectorInfo {
+  SelectionVectorType type;
+  int32_t rows;
+  uintptr_t addr;
+  int64_t size;
+};
 
-    ModuleId BuildProjector(ProtoMessage pb_schema,
-                            ProtoMessage pb_exprs,
-                            SelectionVectorType selection_vector_type,
-                            ConfigId config_id);
+using rust_mutable_buffer_reserve_fn = void (*)(RustMutableBuffers*, uintptr_t,
+                                                RustMutableBuffer*, int64_t);
 
-    void EvaluateProjector(ModuleId module_id,
-                           int64_t num_rows,
-                           RustBuffer *in_bufs,
-                           int32_t in_bufs_len,
-                           SelectionVectorInfo sel_vec_info,
-                           RustMutableBuffer *out_bufs,
-                           int32_t out_bufs_len,
-                           RustMutableBuffers *mutable_buffers,
-                           rust_mutable_buffer_reserve_fn reserve_fn);
+ModuleId BuildProjector(ProtoMessage pb_schema, ProtoMessage pb_exprs,
+                        SelectionVectorType selection_vector_type, ConfigId config_id);
 
-    void CloseProjector(ModuleId module_id);
+void EvaluateProjector(ModuleId module_id, int64_t num_rows, RustBuffer* in_bufs,
+                       int32_t in_bufs_len, SelectionVectorInfo sel_vec_info,
+                       RustMutableBuffer* out_bufs, int32_t out_bufs_len,
+                       RustMutableBuffers* mutable_buffers,
+                       rust_mutable_buffer_reserve_fn reserve_fn);
 
-    ModuleId BuildFilter(ProtoMessage pb_schema,
-                         ProtoMessage pb_condition,
-                         ConfigId config_id);
+void CloseProjector(ModuleId module_id);
 
-    int32_t EvaluateFilter(ModuleId module_id,
-                           int64_t num_rows,
-                           RustBuffer *in_bufs,
-                           int32_t in_bufs_len,
-                           SelectionVectorType selection_vector_type,
-                           RustBuffer out_buf);
+ModuleId BuildFilter(ProtoMessage pb_schema, ProtoMessage pb_condition,
+                     ConfigId config_id);
 
-    void CloseFilter(ModuleId module_id);
+int32_t EvaluateFilter(ModuleId module_id, int64_t num_rows, RustBuffer* in_bufs,
+                       int32_t in_bufs_len, SelectionVectorType selection_vector_type,
+                       RustBuffer out_buf);
+
+void CloseFilter(ModuleId module_id);
+
 }  // namespace gandiva
-

@@ -39,7 +39,7 @@ fn build_schema() -> Schema {
 
 // 4 * (9 + int32)
 fn func_expr() -> ExpressionTree {
-    let literal_node = TreeBuilder::make_int(9);
+    let literal_node = TreeBuilder::make_int32(9);
     let column_node = TreeBuilder::make_field(Field::new("int32", DataType::Int32, true));
     let add_func_node = TreeBuilder::make_function(
         "add".to_string(),
@@ -47,7 +47,7 @@ fn func_expr() -> ExpressionTree {
         DataType::Int32,
     );
 
-    let literal_node = TreeBuilder::make_int(4);
+    let literal_node = TreeBuilder::make_int32(4);
     let multiply_func_node = TreeBuilder::make_function(
         "multiply".to_string(),
         vec![literal_node, add_func_node],

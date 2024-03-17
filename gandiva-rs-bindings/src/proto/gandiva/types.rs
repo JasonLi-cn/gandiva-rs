@@ -41,6 +41,34 @@ pub struct Field {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Schema {
+    #[prost(message, repeated, tag = "1")]
+    pub columns: ::prost::alloc::vec::Vec<Field>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GandivaDataTypes {
+    #[prost(message, repeated, tag = "1")]
+    pub data_type: ::prost::alloc::vec::Vec<ExtGandivaType>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GandivaFunctions {
+    #[prost(message, repeated, tag = "1")]
+    pub function: ::prost::alloc::vec::Vec<FunctionSignature>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FunctionSignature {
+    #[prost(string, optional, tag = "1")]
+    pub name: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "2")]
+    pub return_type: ::core::option::Option<ExtGandivaType>,
+    #[prost(message, repeated, tag = "3")]
+    pub param_types: ::prost::alloc::vec::Vec<ExtGandivaType>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct FieldNode {
     #[prost(message, optional, tag = "1")]
     pub field: ::core::option::Option<Field>,
@@ -87,33 +115,69 @@ pub struct NullNode {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct IntNode {
-    #[prost(int32, optional, tag = "1")]
-    pub value: ::core::option::Option<i32>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FloatNode {
-    #[prost(float, optional, tag = "1")]
-    pub value: ::core::option::Option<f32>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DoubleNode {
-    #[prost(double, optional, tag = "1")]
-    pub value: ::core::option::Option<f64>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct BooleanNode {
     #[prost(bool, optional, tag = "1")]
     pub value: ::core::option::Option<bool>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UInt8Node {
+    #[prost(uint32, optional, tag = "1")]
+    pub value: ::core::option::Option<u32>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UInt16Node {
+    #[prost(uint32, optional, tag = "1")]
+    pub value: ::core::option::Option<u32>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UInt32Node {
+    #[prost(uint32, optional, tag = "1")]
+    pub value: ::core::option::Option<u32>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UInt64Node {
+    #[prost(uint64, optional, tag = "1")]
+    pub value: ::core::option::Option<u64>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Int8Node {
+    #[prost(int32, optional, tag = "1")]
+    pub value: ::core::option::Option<i32>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Int16Node {
+    #[prost(int32, optional, tag = "1")]
+    pub value: ::core::option::Option<i32>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Int32Node {
+    #[prost(int32, optional, tag = "1")]
+    pub value: ::core::option::Option<i32>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Int64Node {
     #[prost(int64, optional, tag = "1")]
     pub value: ::core::option::Option<i64>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Float32Node {
+    #[prost(float, optional, tag = "1")]
+    pub value: ::core::option::Option<f32>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Float64Node {
+    #[prost(double, optional, tag = "1")]
+    pub value: ::core::option::Option<f64>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -139,6 +203,68 @@ pub struct DecimalNode {
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct InNode {
+    #[prost(message, optional, boxed, tag = "1")]
+    pub node: ::core::option::Option<::prost::alloc::boxed::Box<TreeNode>>,
+    #[prost(message, optional, tag = "2")]
+    pub int32_values: ::core::option::Option<Int32Constants>,
+    #[prost(message, optional, tag = "3")]
+    pub int64_values: ::core::option::Option<Int64Constants>,
+    #[prost(message, optional, tag = "4")]
+    pub decimal_values: ::core::option::Option<DecimalConstants>,
+    #[prost(message, optional, tag = "5")]
+    pub string_values: ::core::option::Option<StringConstants>,
+    #[prost(message, optional, tag = "6")]
+    pub binary_values: ::core::option::Option<BinaryConstants>,
+    #[prost(message, optional, tag = "7")]
+    pub float32_values: ::core::option::Option<Float32Constants>,
+    #[prost(message, optional, tag = "8")]
+    pub float64_values: ::core::option::Option<Float64Constants>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Int32Constants {
+    #[prost(message, repeated, tag = "1")]
+    pub int32_values: ::prost::alloc::vec::Vec<Int32Node>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Int64Constants {
+    #[prost(message, repeated, tag = "1")]
+    pub int64_values: ::prost::alloc::vec::Vec<Int64Node>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DecimalConstants {
+    #[prost(message, repeated, tag = "1")]
+    pub decimal_values: ::prost::alloc::vec::Vec<DecimalNode>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct StringConstants {
+    #[prost(message, repeated, tag = "1")]
+    pub string_values: ::prost::alloc::vec::Vec<StringNode>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BinaryConstants {
+    #[prost(message, repeated, tag = "1")]
+    pub binary_values: ::prost::alloc::vec::Vec<BinaryNode>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Float32Constants {
+    #[prost(message, repeated, tag = "1")]
+    pub float32_values: ::prost::alloc::vec::Vec<Float32Node>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Float64Constants {
+    #[prost(message, repeated, tag = "1")]
+    pub float64_values: ::prost::alloc::vec::Vec<Float64Node>,
+}
+#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TreeNode {
     #[prost(message, optional, tag = "1")]
     pub field_node: ::core::option::Option<FieldNode>,
@@ -155,23 +281,35 @@ pub struct TreeNode {
     #[prost(message, optional, tag = "11")]
     pub null_node: ::core::option::Option<NullNode>,
     #[prost(message, optional, tag = "12")]
-    pub int_node: ::core::option::Option<IntNode>,
-    #[prost(message, optional, tag = "13")]
-    pub float_node: ::core::option::Option<FloatNode>,
-    #[prost(message, optional, tag = "14")]
-    pub int64_node: ::core::option::Option<Int64Node>,
-    #[prost(message, optional, tag = "15")]
     pub boolean_node: ::core::option::Option<BooleanNode>,
+    #[prost(message, optional, tag = "13")]
+    pub uint8_node: ::core::option::Option<UInt8Node>,
+    #[prost(message, optional, tag = "14")]
+    pub uint16_node: ::core::option::Option<UInt16Node>,
+    #[prost(message, optional, tag = "15")]
+    pub uint32_node: ::core::option::Option<UInt32Node>,
     #[prost(message, optional, tag = "16")]
-    pub double_node: ::core::option::Option<DoubleNode>,
+    pub uint64_node: ::core::option::Option<UInt64Node>,
     #[prost(message, optional, tag = "17")]
-    pub string_node: ::core::option::Option<StringNode>,
+    pub int8_node: ::core::option::Option<Int8Node>,
     #[prost(message, optional, tag = "18")]
-    pub binary_node: ::core::option::Option<BinaryNode>,
+    pub int16_node: ::core::option::Option<Int16Node>,
     #[prost(message, optional, tag = "19")]
+    pub int32_node: ::core::option::Option<Int32Node>,
+    #[prost(message, optional, tag = "20")]
+    pub int64_node: ::core::option::Option<Int64Node>,
+    #[prost(message, optional, tag = "21")]
+    pub float32_node: ::core::option::Option<Float32Node>,
+    #[prost(message, optional, tag = "22")]
+    pub float64_node: ::core::option::Option<Float64Node>,
+    #[prost(message, optional, tag = "23")]
+    pub string_node: ::core::option::Option<StringNode>,
+    #[prost(message, optional, tag = "24")]
+    pub binary_node: ::core::option::Option<BinaryNode>,
+    #[prost(message, optional, tag = "25")]
     pub decimal_node: ::core::option::Option<DecimalNode>,
     /// in expr
-    #[prost(message, optional, boxed, tag = "21")]
+    #[prost(message, optional, boxed, tag = "26")]
     pub in_node: ::core::option::Option<::prost::alloc::boxed::Box<InNode>>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
@@ -193,96 +331,6 @@ pub struct ExpressionList {
 pub struct Condition {
     #[prost(message, optional, tag = "1")]
     pub root: ::core::option::Option<TreeNode>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Schema {
-    #[prost(message, repeated, tag = "1")]
-    pub columns: ::prost::alloc::vec::Vec<Field>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GandivaDataTypes {
-    #[prost(message, repeated, tag = "1")]
-    pub data_type: ::prost::alloc::vec::Vec<ExtGandivaType>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct GandivaFunctions {
-    #[prost(message, repeated, tag = "1")]
-    pub function: ::prost::alloc::vec::Vec<FunctionSignature>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FunctionSignature {
-    #[prost(string, optional, tag = "1")]
-    pub name: ::core::option::Option<::prost::alloc::string::String>,
-    #[prost(message, optional, tag = "2")]
-    pub return_type: ::core::option::Option<ExtGandivaType>,
-    #[prost(message, repeated, tag = "3")]
-    pub param_types: ::prost::alloc::vec::Vec<ExtGandivaType>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct InNode {
-    #[prost(message, optional, boxed, tag = "1")]
-    pub node: ::core::option::Option<::prost::alloc::boxed::Box<TreeNode>>,
-    #[prost(message, optional, tag = "2")]
-    pub int_values: ::core::option::Option<IntConstants>,
-    #[prost(message, optional, tag = "3")]
-    pub int64_values: ::core::option::Option<Int64Constants>,
-    #[prost(message, optional, tag = "4")]
-    pub string_values: ::core::option::Option<StringConstants>,
-    #[prost(message, optional, tag = "5")]
-    pub binary_values: ::core::option::Option<BinaryConstants>,
-    #[prost(message, optional, tag = "6")]
-    pub decimal_values: ::core::option::Option<DecimalConstants>,
-    #[prost(message, optional, tag = "7")]
-    pub float_values: ::core::option::Option<FloatConstants>,
-    #[prost(message, optional, tag = "8")]
-    pub double_values: ::core::option::Option<DoubleConstants>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct IntConstants {
-    #[prost(message, repeated, tag = "1")]
-    pub int_values: ::prost::alloc::vec::Vec<IntNode>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Int64Constants {
-    #[prost(message, repeated, tag = "1")]
-    pub int64_values: ::prost::alloc::vec::Vec<Int64Node>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DecimalConstants {
-    #[prost(message, repeated, tag = "1")]
-    pub decimal_values: ::prost::alloc::vec::Vec<DecimalNode>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct FloatConstants {
-    #[prost(message, repeated, tag = "1")]
-    pub float_values: ::prost::alloc::vec::Vec<FloatNode>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct DoubleConstants {
-    #[prost(message, repeated, tag = "1")]
-    pub double_values: ::prost::alloc::vec::Vec<DoubleNode>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct StringConstants {
-    #[prost(message, repeated, tag = "1")]
-    pub string_values: ::prost::alloc::vec::Vec<StringNode>,
-}
-#[allow(clippy::derive_partial_eq_without_eq)]
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct BinaryConstants {
-    #[prost(message, repeated, tag = "1")]
-    pub binary_values: ::prost::alloc::vec::Vec<BinaryNode>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -483,6 +531,7 @@ pub enum SelectionVectorType {
     SvNone = 0,
     SvInt16 = 1,
     SvInt32 = 2,
+    SvInt64 = 3,
 }
 impl SelectionVectorType {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -494,6 +543,7 @@ impl SelectionVectorType {
             SelectionVectorType::SvNone => "SV_NONE",
             SelectionVectorType::SvInt16 => "SV_INT16",
             SelectionVectorType::SvInt32 => "SV_INT32",
+            SelectionVectorType::SvInt64 => "SV_INT64",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -502,6 +552,7 @@ impl SelectionVectorType {
             "SV_NONE" => Some(Self::SvNone),
             "SV_INT16" => Some(Self::SvInt16),
             "SV_INT32" => Some(Self::SvInt32),
+            "SV_INT64" => Some(Self::SvInt64),
             _ => None,
         }
     }

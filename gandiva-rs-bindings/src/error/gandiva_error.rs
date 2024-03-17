@@ -16,6 +16,7 @@
 
 #[derive(Debug)]
 pub enum GandivaError {
+    ProjectionMake(String),
     CreateRecordBatch(arrow::error::ArrowError),
 }
 

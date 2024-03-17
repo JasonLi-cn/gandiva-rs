@@ -27,7 +27,7 @@ fn test_filter() {
     let schema = Schema::new(vec![Field::new("int32", DataType::Int32, false)]);
 
     let field = TreeBuilder::make_field(Field::new("int32", DataType::Int32, false));
-    let literal = TreeBuilder::make_int(4);
+    let literal = TreeBuilder::make_int32(4);
     let root = TreeBuilder::make_function(
         "less_than".to_string(),
         vec![field, literal],

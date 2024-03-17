@@ -24,42 +24,42 @@
 
 namespace gandiva {
 
-template<typename HOLDER>
+template <typename HOLDER>
 class IdToModuleMap {
-public:
-    IdToModuleMap() : module_id_(kInitModuleId) {}
+ public:
+  IdToModuleMap() : module_id_(kInitModuleId) {}
 
-    ModuleId Insert(HOLDER holder) {
-        mtx_.lock();
-        ModuleId result = module_id_++;
-        map_.insert(std::pair<ModuleId, HOLDER>(result, holder));
-        mtx_.unlock();
-        return result;
+  ModuleId Insert(HOLDER holder) {
+    mtx_.lock();
+    ModuleId result = module_id_++;
+    map_.insert(std::pair<ModuleId, HOLDER>(result, holder));
+    mtx_.unlock();
+    return result;
+  }
+
+  void Erase(ModuleId module_id) {
+    mtx_.lock();
+    map_.erase(module_id);
+    mtx_.unlock();
+  }
+
+  HOLDER Lookup(ModuleId module_id) {
+    HOLDER result = nullptr;
+    mtx_.lock();
+    try {
+      result = map_.at(module_id);
+    } catch (const std::out_of_range&) {
     }
+    mtx_.unlock();
+    return result;
+  }
 
-    void Erase(ModuleId module_id) {
-        mtx_.lock();
-        map_.erase(module_id);
-        mtx_.unlock();
-    }
+ private:
+  static const int kInitModuleId = 4;
 
-    HOLDER Lookup(ModuleId module_id) {
-        HOLDER result = nullptr;
-        mtx_.lock();
-        try {
-            result = map_.at(module_id);
-        } catch (const std::out_of_range &) {
-        }
-        mtx_.unlock();
-        return result;
-    }
-
-private:
-    static const int kInitModuleId = 4;
-
-    int64_t module_id_;
-    std::mutex mtx_;
-    std::unordered_map<ModuleId, HOLDER> map_;
+  int64_t module_id_;
+  std::mutex mtx_;
+  std::unordered_map<ModuleId, HOLDER> map_;
 };
 
 }  // namespace gandiva

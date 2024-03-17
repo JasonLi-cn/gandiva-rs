@@ -19,6 +19,8 @@ build/
 arrow-cpp-build/
 arrow-cpp-install/
 cpp-build/
+cmake-build-debug/
 
 # Dev
 .idea/
+.DS_Store

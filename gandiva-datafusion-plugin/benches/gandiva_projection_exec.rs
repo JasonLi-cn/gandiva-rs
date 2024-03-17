@@ -24,20 +24,20 @@ use gandiva_datafusion_plugin::tests::utils::{
 
 fn criterion_benchmark(c: &mut Criterion) {
     let sizes = vec![1024, 8192];
-    let ctx = create_ctx(&sizes);
+    let ctx = create_ctx(&sizes, true);
     let state = ctx.state();
     let runtime = tokio::runtime::Builder::new_multi_thread().build().unwrap();
 
     let sqls = [
-        "select t_int32 + 1 from tab",
-        "select t_int32 + 1, t_int64 / 1000 from tab",
-        "select t_int32 + 1, t_int64 / 1000, t_float32 * 3.14159 from tab",
-        "select concat(t_utf8, 'OK') from tab",
+        "select t_int32_1 + 1 from tab",
+        "select t_int32_1 + 1, t_int64_1 / 1000 from tab",
+        "select t_int32_1 + 1, t_int64_1 / 1000, t_float32_1 * 3.14159 from tab",
+        "select concat(t_utf8_1, 'OK') from tab",
     ];
 
     for sql in sqls {
         for size in &sizes {
-            let sql = format!("{}{}", sql, size); // specify table with size
+            let sql = sql.replace("tab", &format!("tab{}", size)); // specify table with size
             let plan = build_plan_block(&runtime, &state, &sql);
             c.bench_function(&format!("Vector: {}", sql), |b| {
                 b.iter(|| criterion::black_box(run_plan_block(&runtime, &state, plan.clone())))

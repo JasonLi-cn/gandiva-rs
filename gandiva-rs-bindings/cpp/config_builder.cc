@@ -16,23 +16,23 @@
 
 #include <gandiva/configuration.h>
 
-#include "config_holder.h"
 #include "config_builder.h"
+#include "config_holder.h"
 
 using gandiva::ConfigHolder;
 using gandiva::Configuration;
 using gandiva::ConfigurationBuilder;
 
 namespace gandiva {
-    ConfigId BuildConfigInstance(bool optimize, bool target_host_cpu) {
-        ConfigurationBuilder configuration_builder;
-        std::shared_ptr<Configuration> config = configuration_builder.build();
-        config->set_optimize(optimize);
-        config->target_host_cpu(target_host_cpu);
-        return ConfigHolder::MapInsert(config);
-    }
 
-    void ReleaseConfigInstance(ConfigId config_id) {
-        ConfigHolder::MapErase(config_id);
-    }
-} // namespace gandiva
+ConfigId BuildConfigInstance(bool optimize, bool target_host_cpu) {
+  ConfigurationBuilder configuration_builder;
+  std::shared_ptr<Configuration> config = configuration_builder.build();
+  config->set_optimize(optimize);
+  config->target_host_cpu(target_host_cpu);
+  return ConfigHolder::MapInsert(config);
+}
+
+void ReleaseConfigInstance(ConfigId config_id) { ConfigHolder::MapErase(config_id); }
+
+}  // namespace gandiva

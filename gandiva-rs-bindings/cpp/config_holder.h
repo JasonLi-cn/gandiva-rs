@@ -25,43 +25,45 @@
 
 namespace gandiva {
 
-    class ConfigHolder {
-    public:
-        static ConfigId MapInsert(std::shared_ptr<Configuration> config) {
-            g_mtx_.lock();
+class ConfigHolder {
+ public:
+  static ConfigId MapInsert(std::shared_ptr<Configuration> config) {
+    g_mtx_.lock();
 
-            ConfigId result = config_id_++;
-            configuration_map_.insert(std::pair<int64_t, std::shared_ptr<Configuration>>(result, config));
+    ConfigId result = config_id_++;
+    configuration_map_.insert(
+        std::pair<int64_t, std::shared_ptr<Configuration>>(result, config));
 
-            g_mtx_.unlock();
-            return result;
-        }
+    g_mtx_.unlock();
+    return result;
+  }
 
-        static void MapErase(ConfigId config_id) {
-            g_mtx_.lock();
-            configuration_map_.erase(config_id);
-            g_mtx_.unlock();
-        }
+  static void MapErase(ConfigId config_id) {
+    g_mtx_.lock();
+    configuration_map_.erase(config_id);
+    g_mtx_.unlock();
+  }
 
-        static std::shared_ptr<Configuration> MapLookup(ConfigId config_id) {
-            std::shared_ptr<Configuration> result = nullptr;
+  static std::shared_ptr<Configuration> MapLookup(ConfigId config_id) {
+    std::shared_ptr<Configuration> result = nullptr;
 
-            try {
-                result = configuration_map_.at(config_id);
-            } catch (const std::out_of_range &) {
-                return ConfigurationBuilder::DefaultConfiguration();
-            }
+    try {
+      result = configuration_map_.at(config_id);
+    } catch (const std::out_of_range&) {
+      return ConfigurationBuilder::DefaultConfiguration();
+    }
 
-            return result;
-        }
+    return result;
+  }
 
-    private:
-        // map of configuration objects created so far
-        static std::unordered_map<ConfigId, std::shared_ptr<Configuration>> configuration_map_;
+ private:
+  // map of configuration objects created so far
+  static std::unordered_map<ConfigId, std::shared_ptr<Configuration>> configuration_map_;
 
-        static std::mutex g_mtx_;
+  static std::mutex g_mtx_;
 
-        // atomic counter for projector module ids
-        static ConfigId config_id_;
-    };
+  // atomic counter for projector module ids
+  static ConfigId config_id_;
+};
+
 }  // namespace gandiva

@@ -64,6 +64,12 @@ impl Projector {
         selection_vector_type: SelectionVectorType,
         config_id: ConfigId,
     ) -> GandivaResult<ProjectorRef> {
+        if schema.fields().is_empty() {
+            return Err(GandivaError::ProjectionMake(
+                "Projector input fields can't be empty".to_string(),
+            ));
+        }
+
         // Schema
         let mut schema_bytes = to_bytes(ArrowTypeHelper::arrow_schema_to_protobuf(schema)?);
         let pb_schema = gandiva_ProtoMessage {

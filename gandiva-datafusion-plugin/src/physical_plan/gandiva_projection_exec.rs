@@ -16,7 +16,6 @@
 
 use crate::physical_expr::expr::to_gandiva_projector;
 use arrow::array::RecordBatch;
-use arrow::record_batch::RecordBatchOptions;
 use datafusion::arrow::datatypes::SchemaRef;
 use datafusion::common::Statistics;
 use datafusion::error::{DataFusionError, Result};
@@ -47,7 +46,25 @@ pub struct GandivaProjectionExec {
 
 impl DisplayAs for GandivaProjectionExec {
     fn fmt_as(&self, t: DisplayFormatType, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        self.inner.fmt_as(t, f)
+        match t {
+            DisplayFormatType::Default | DisplayFormatType::Verbose => {
+                let expr: Vec<String> = self
+                    .inner
+                    .expr()
+                    .iter()
+                    .map(|(e, alias)| {
+                        let e = e.to_string();
+                        if &e != alias {
+                            format!("{e} as {alias}")
+                        } else {
+                            e
+                        }
+                    })
+                    .collect();
+
+                write!(f, "GandivaProjectionExec: expr=[{}]", expr.join(", "))
+            }
+        }
     }
 }
 
@@ -186,14 +203,8 @@ impl GandivaProjectionStream {
     fn batch_project(&self, batch: &RecordBatch) -> Result<RecordBatch> {
         // records time on drop
         let _timer = self.baseline_metrics.elapsed_compute().timer();
-        let columns = batch.columns();
-        if columns.is_empty() {
-            let options = RecordBatchOptions::new().with_row_count(Some(batch.num_rows()));
-            return RecordBatch::try_new_with_options(self.schema.clone(), vec![], &options)
-                .map_err(Into::into);
-        }
         self.projector
-            .evaluate1(columns)
+            .evaluate1(batch.columns())
             .map_err(|e| DataFusionError::Execution(format!("{:?}", e)))
     }
 }

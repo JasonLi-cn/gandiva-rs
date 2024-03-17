@@ -15,7 +15,7 @@
 #pragma once
 
 namespace gandiva {
-    using ModuleId = int64_t;
-    using ConfigId = int64_t;
-    using SelectionVectorType = int32_t;
-} // namespace gandiva
+using ModuleId = int64_t;
+using ConfigId = int64_t;
+using SelectionVectorType = int32_t;
+}  // namespace gandiva

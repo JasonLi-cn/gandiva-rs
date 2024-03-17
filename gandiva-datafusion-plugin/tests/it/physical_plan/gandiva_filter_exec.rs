@@ -21,12 +21,12 @@ use gandiva_datafusion_plugin::tests::utils::{
 #[tokio::test]
 async fn test_filter() {
     let sizes = vec![16];
-    let ctx = create_ctx(&sizes);
+    let ctx = create_ctx(&sizes, true);
     let state = ctx.state();
 
     let sqls = [
-        "select * from tab16 where t_int32 > 1",
-        "select * from tab16 where length(t_utf8) > 2",
+        "select * from tab16 where t_int32_1 > 1",
+        "select * from tab16 where length(t_utf8_1) > 2",
     ];
 
     for sql in sqls {

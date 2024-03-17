@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-use ahash::HashSet;
-
 use crate::error::gandiva_error::GandivaResult;
-use crate::expression::decimal_node::DecimalNode;
+use crate::expression::primitive_nodes::DecimalNode;
 use crate::expression::tree_node::TreeNode;
 
 #[derive(Clone)]
 pub enum InValues {
-    Int(HashSet<i32>),
-    Int64(HashSet<i64>),
-    String(HashSet<Vec<u8>>),
-    Binary(HashSet<Vec<u8>>),
-    Decimal(HashSet<DecimalNode>),
-    Float(HashSet<f32>),
-    Double(HashSet<f64>),
+    Int32(Vec<i32>),
+    Int64(Vec<i64>),
+    Decimal(Vec<DecimalNode>),
+    String(Vec<String>),
+    Binary(Vec<Vec<u8>>),
+    Float32(Vec<f32>),
+    Float64(Vec<f64>),
 }
 
 #[derive(Clone)]
@@ -53,7 +51,7 @@ impl TreeNode for InNode {
                     $(InValues::$TYPE(values) => {
                         let $CONST_FIELD = values
                             .into_iter()
-                            .map(|v| crate::proto::$NODE { value: Some(v) })
+                            .map(|v| crate::proto::$NODE { value: Some(v.into()) })
                             .collect::<Vec<_>>();
                         Some(Box::new(crate::proto::InNode {
                             node: Some(Box::new(input)),
@@ -77,12 +75,12 @@ impl TreeNode for InNode {
         }
 
         let in_node = build_in_node!(
-            [Int, IntNode, IntConstants, int_values],
+            [Int32, Int32Node, Int32Constants, int32_values],
             [Int64, Int64Node, Int64Constants, int64_values],
             [String, StringNode, StringConstants, string_values],
             [Binary, BinaryNode, BinaryConstants, binary_values],
-            [Float, FloatNode, FloatConstants, float_values],
-            [Double, DoubleNode, DoubleConstants, double_values]
+            [Float32, Float32Node, Float32Constants, float32_values],
+            [Float64, Float64Node, Float64Constants, float64_values]
         );
 
         Ok(crate::proto::TreeNode {

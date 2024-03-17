@@ -17,6 +17,44 @@
 use crate::error::gandiva_error::GandivaResult;
 use crate::expression::tree_node::TreeNode;
 
+macro_rules! make_node {
+    ($NAME:ident, $NATIVE_TYPE:ty, $PB_NODE:tt) => {
+        #[derive(Clone)]
+        pub struct $NAME {
+            value: $NATIVE_TYPE,
+        }
+
+        impl $NAME {
+            pub fn create(value: $NATIVE_TYPE) -> Self {
+                Self { value }
+            }
+        }
+
+        impl TreeNode for $NAME {
+            fn to_protobuf(self) -> GandivaResult<crate::proto::TreeNode> {
+                Ok(crate::proto::TreeNode {
+                    $PB_NODE: Some(crate::proto::$NAME {
+                        value: Some(self.value as _),
+                    }),
+                    ..Default::default()
+                })
+            }
+        }
+    };
+}
+
+make_node!(BooleanNode, bool, boolean_node);
+make_node!(UInt8Node, u8, uint8_node);
+make_node!(UInt16Node, u16, uint16_node);
+make_node!(UInt32Node, u32, uint32_node);
+make_node!(UInt64Node, u64, uint64_node);
+make_node!(Int8Node, i8, int8_node);
+make_node!(Int16Node, i16, int16_node);
+make_node!(Int32Node, i32, int32_node);
+make_node!(Int64Node, i64, int64_node);
+make_node!(Float32Node, f32, float32_node);
+make_node!(Float64Node, f64, float64_node);
+
 #[derive(Clone, Eq, PartialEq, Hash)]
 pub struct DecimalNode {
     value: String,

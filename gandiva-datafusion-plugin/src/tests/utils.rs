@@ -47,23 +47,31 @@ pub async fn run_plan(state: &SessionState, plan: Arc<dyn ExecutionPlan>) -> Vec
     collect(plan, task_ctx).await.unwrap()
 }
 
-pub fn create_ctx(sizes: &[usize]) -> SessionContext {
+pub fn create_ctx(sizes: &[usize], nullable: bool) -> SessionContext {
     let mut config = SessionConfig::new();
     config.options_mut().execution.coalesce_batches = false;
 
     let mut ctx = SessionContext::new_with_config(config);
     for size in sizes {
-        register_mem_table(&mut ctx, *size);
+        register_mem_table(&mut ctx, *size, nullable);
     }
     ctx
 }
 
-pub fn register_mem_table(ctx: &mut SessionContext, size: usize) {
+pub fn register_mem_table(ctx: &mut SessionContext, size: usize, nullable: bool) {
     let schema = Arc::new(Schema::new(vec![
-        Field::new("t_int32", DataType::Int32, true),
-        Field::new("t_int64", DataType::Int64, true),
-        Field::new("t_float32", DataType::Float32, true),
-        Field::new("t_utf8", DataType::Utf8, true),
+        Field::new("t_boolean_1", DataType::Boolean, nullable),
+        Field::new("t_boolean_2", DataType::Boolean, nullable),
+        Field::new("t_boolean_3", DataType::Boolean, nullable),
+        Field::new("t_int32_1", DataType::Int32, nullable),
+        Field::new("t_int32_2", DataType::Int32, nullable),
+        Field::new("t_int64_1", DataType::Int64, nullable),
+        Field::new("t_int64_2", DataType::Int64, nullable),
+        Field::new("t_int64_3", DataType::Int64, nullable),
+        Field::new("t_float32_1", DataType::Float32, nullable),
+        Field::new("t_utf8_1", DataType::Utf8, nullable),
+        Field::new("t_utf8_2", DataType::Utf8, nullable),
+        Field::new("t_utf8_3", DataType::Utf8, nullable),
     ]));
     let batch = create_random_batch(schema.clone(), size, 0.2, 0.8).unwrap();
     let tab = Arc::new(MemTable::try_new(schema, vec![vec![batch]]).unwrap());

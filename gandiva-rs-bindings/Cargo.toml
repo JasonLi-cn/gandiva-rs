@@ -28,12 +28,10 @@ path = "src/lib.rs"
 bench = false
 
 [dependencies]
-ahash = { version = "=0.8.6" }
-arrow = { version = "50.0.0", features = ["prettyprint"] }
+arrow = { workspace = true, features = ["prettyprint"] }
 prost = { version = "0.12" }
 strum = { version = "0.25.0", features = ["derive"] }
 strum_macros = { version = "0.25.0" }
-tonic = { version = "0.10" }
 
 [dev-dependencies]
 criterion = { version = "0.5" }
